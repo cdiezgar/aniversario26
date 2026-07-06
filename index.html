@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Tren de Nuestros Recuerdos - Jonathan y Carlos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Tipografías de alta gama */
+    .font-romantic {
+      font-family: 'Alex Brush', cursive;
+    }
+    .font-serif-elegant {
+      font-family: 'Playfair Display', serif;
+    }
+    .font-sans-clean {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #022c22 0%, #011c15 60%, #000a08 100%);
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden; /* Evita scrolls innecesarios en la app principal */
+    }
+
+    /* Fondo de luciérnagas y energía solarpunk */
+    .solarpunk-glow {
+      background-image: 
+        radial-gradient(rgba(245, 158, 11, 0.4) 1.5px, transparent 25px),
+        radial-gradient(rgba(16, 185, 129, 0.3) 2px, transparent 35px),
+        radial-gradient(rgba(251, 191, 36, 0.25) 1px, transparent 20px);
+      background-size: 400px 400px, 300px 300px, 200px 200px;
+      background-position: 0 0, 50px 70px, 120px 180px;
+      animation: drift 60s linear infinite;
+    }
+
+    @keyframes drift {
+      from { background-position: 0 0, 50px 70px, 120px 180px; }
+      to { background-position: 400px 800px, 350px 370px, 320px 180px; }
+    }
+
+    /* Animaciones del Sobre de Carta Solarpunk (Cuero Verde y Oro) */
+    .envelope-wrapper {
+      perspective: 1000px;
+    }
+
+    .envelope {
+      position: relative;
+      width: 330px;
+      height: 230px;
+      background: #064e3b; /* Verde bosque profundo */
+      box-shadow: 0 30px 60px -15px rgba(0,0,0,0.9), inset 0 0 20px rgba(16, 185, 129, 0.2);
+      transition: transform 0.8s ease;
+      transform-style: preserve-3d;
+      border-radius: 6px;
+      border: 1px solid rgba(245, 158, 11, 0.3); /* Detalles de latón */
+    }
+
+    /* Solapa superior */
+    .envelope::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 165px solid transparent;
+      border-right: 165px solid transparent;
+      border-top: 125px solid #047857; /* Verde más vivo */
+      transform-origin: top;
+      transition: transform 0.5s ease 0.5s, z-index 0.1s ease 0.5s;
+      z-index: 4;
+    }
+
+    /* Solapas laterales e inferior */
+    .envelope::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 165px solid #064e3b;
+      border-right: 165px solid #064e3b;
+      border-bottom: 115px solid #022c22;
+      z-index: 3;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .envelope-open::before {
+      transform: rotateX(180deg);
+      z-index: 1;
+      transition: transform 0.5s ease, z-index 0.1s ease 0.1s;
+    }
+
+    /* Tarjeta interior de pergamino */
+    .letter {
+      position: absolute;
+      bottom: 10px;
+      left: 15px;
+      width: 300px;
+      height: 190px;
+      background: linear-gradient(135deg, #fdfbf7 0%, #f7f3e3 100%);
+      border-radius: 6px;
+      transition: transform 0.6s ease 0.8s, height 0.6s ease 0.8s;
+      z-index: 2;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 0 25px rgba(245, 158, 11, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 20px;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .envelope-open .letter {
+      transform: translateY(-120px);
+      height: 240px;
+      z-index: 5;
+    }
+
+    /* Sello de lacre solar dorado */
+    .wax-seal {
+      position: absolute;
+      top: 95px;
+      left: 140px;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(#fbbf24, #d97706);
+      border-radius: 50%;
+      z-index: 10;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4), inset 0 0 8px rgba(255,255,255,0.4);
+      transition: transform 0.3s ease, opacity 0.5s ease 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fef08a;
+    }
+
+    .wax-seal::after {
+      content: "☀";
+      color: #78350f;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .envelope-open .wax-seal {
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* CAJA DE REGALO TRADICIONAL */
+    .gift-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      cursor: pointer;
+    }
+
+    .gift-box-body {
+      position: absolute;
+      bottom: 0;
+      width: 120px;
+      height: 100px;
+      background: #e11d48; /* Rosa/Rojo elegante */
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      left: 10px;
+      z-index: 10;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    /* Lazo vertical y horizontal del cuerpo */
+    .gift-box-body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 100%;
+      background: #fbbf24; /* Cinta Dorada */
+    }
+
+    .gift-box-lid {
+      position: absolute;
+      top: 24px;
+      width: 130px;
+      height: 25px;
+      background: #f43f5e;
+      border-radius: 4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      left: 5px;
+      z-index: 11;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+    }
+
+    /* Lazo de la tapa */
+    .gift-box-lid::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 100%;
+      background: #fbbf24;
+    }
+
+    /* Moño superior de la caja */
+    .gift-bow {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 40px;
+      z-index: 12;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    .gift-bow::before, .gift-bow::after {
+      content: "";
+      position: absolute;
+      bottom: 12px;
+      width: 26px;
+      height: 26px;
+      border: 6px solid #fbbf24;
+      border-radius: 50% 50% 0 50%;
+      transform: rotate(-45deg);
+    }
+    .gift-bow::before {
+      left: 2px;
+    }
+    .gift-bow::after {
+      right: 2px;
+      transform: rotate(135deg);
+      border-radius: 50% 50% 0 50%;
+    }
+
+    /* Efectos de Hover y Animación */
+    .gift-container:hover .gift-box-lid {
+      transform: translateY(-5px);
+    }
+    .gift-container:hover .gift-bow {
+      transform: translateX(-50%) translateY(-5px) scale(1.05);
+    }
+
+    .gift-container.pulse {
+      animation: gentleShake 2.5s infinite ease-in-out;
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      20%, 60% { transform: scale(1.04) rotate(-3deg); }
+      40%, 80% { transform: scale(1.04) rotate(3deg); }
+    }
+
+    /* Animación de apertura definitiva */
+    .gift-container.opened .gift-box-lid {
+      transform: translateY(-60px) rotate(-15deg) scale(0.8);
+      opacity: 0;
+    }
+    .gift-container.opened .gift-bow {
+      transform: translateX(-50%) translateY(-70px) rotate(-15deg) scale(0.8);
+      opacity: 0;
+    }
+    .gift-container.opened .gift-box-body {
+      transform: scale(0.2);
+      opacity: 0;
+    }
+
+    /* Estilo de las vías Solarpunk */
+    .train-track {
+      position: relative;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 10px,
+        #78350f 10px,
+        #78350f 13px
+      );
+      height: 5px;
+      border-radius: 3px;
+    }
+
+    .train-track::before, .train-track::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      background-color: #fbbf24; /* Latón pulido */
+      box-shadow: 0 0 5px rgba(251, 191, 36, 0.4);
+    }
+    .train-track::before { top: -4px; }
+    .train-track::after { bottom: -4px; }
+
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Efecto aureola solar para la locomotora importante (Estación 12) */
+    .locomotive-glow {
+      box-shadow: 0 0 50px rgba(245, 158, 11, 0.8);
+      border-color: #fbbf24 !important;
+      animation: solarFlare 2.5s infinite ease-in-out;
+    }
+
+    @keyframes solarFlare {
+      0%, 100% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.5); border-color: #f59e0b !important; }
+      50% { box-shadow: 0 0 55px rgba(245, 158, 11, 0.95); border-color: #fbbf24 !important; }
+    }
+  </style>
+</head>
+<body class="relative min-h-screen flex flex-col items-center justify-between text-slate-100 select-none pb-4 md:pb-6">
+
+  <div class="stars solarpunk-glow absolute inset-0 pointer-events-none z-0"></div>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="fixed top-4 right-4 z-50 flex items-center gap-2 bg-emerald-950/90 backdrop-blur border border-amber-500/30 p-1.5 rounded-full shadow-lg">
+    <button id="music-btn" class="w-8 h-8 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-slate-950 transition-all transform active:scale-95">
+      <svg id="music-icon-play" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+      </svg>
+      <svg id="music-icon-pause" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </button>
+    <audio id="bg-music" loop>
+      <source src="img/jueves.mp3" type="audio/mpeg">
+      <source src="https://assets.codepen.io/4358584/An+Hour+of+Lofi+Piano+-+Background+Music.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <div id="intro-screen" class="flex-1 w-full flex flex-col items-center justify-center p-4 z-10 transition-all duration-700">
+    <div class="text-center mb-10">
+      <h1 class="font-romantic text-7xl md:text-9xl text-amber-400 mb-2 drop-shadow-[0_4px_12px_rgba(245,158,11,0.3)]">El Tren de Recuerdos</h1>
+      <p class="font-serif-elegant italic text-emerald-300/85 tracking-wide text-sm md:text-base">Haz click en el sello solar para abrir la carta</p>
+    </div>
+
+    <div class="envelope-wrapper relative flex justify-center items-center h-[310px] w-full max-w-[380px]">
+      <div id="main-envelope" class="envelope">
+        <div id="seal-btn" class="wax-seal" onclick="openEnvelope()"></div>
+        
+        <div class="letter">
+          <div class="text-center border-b border-amber-300/50 pb-2">
+            <span class="font-romantic text-3xl text-emerald-950">Para Jonathan</span>
+          </div>
+          <div class="my-auto text-center px-1">
+            <p class="font-serif-elegant italic text-[13px] text-slate-800 leading-relaxed font-medium">
+              "Jonathan, te invito a dar un paseo por la línea del tiempo que hemos construido juntos. Cada parada contiene un trozo de nosotros..."
+            </p>
+          </div>
+          <div class="text-right border-t border-amber-300/50 pt-1.5">
+            <span class="font-romantic text-2xl text-emerald-900">De Carlos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button id="start-journey-btn" class="mt-10 px-8 py-4 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold tracking-widest text-xs uppercase rounded-full shadow-[0_0_20px_rgba(245,158,11,0.4)] scale-0 transition-all duration-500 flex items-center gap-2">
+      <span>Comenzar Viaje</span>
+      <svg class="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </button>
+  </div>
+
+  <div id="journey-screen" class="hidden flex-1 w-full max-w-6xl px-4 flex flex-col items-center justify-center gap-3 z-10 py-3">
+    
+    <div class="text-center mb-1">
+      <span id="slide-badge" class="px-3 py-0.5 text-[9px] uppercase tracking-widest font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400 rounded-full">Categoría</span>
+      <h2 id="slide-title" class="font-serif-elegant text-2xl md:text-3xl text-white font-semibold mt-1">Estación</h2>
+    </div>
+
+    <div class="w-full flex justify-center">
+      <div id="image-frame" class="relative w-full max-w-4xl h-[48vh] md:h-[62vh] rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] border-4 border-emerald-950 bg-emerald-950/20 backdrop-blur-sm transition-all duration-500 flex items-center justify-center">
+        
+        <div id="special-badge" class="hidden absolute top-4 left-4 z-30 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 text-[10px] font-bold tracking-widest px-4 py-1.5 rounded-full uppercase shadow-[0_4px_15px_rgba(245,158,11,0.5)] animate-pulse">
+          🚂 La Locomotora (Nuestra parada estrella)
+        </div>
+
+        <img id="display-image" src="" alt="Parada del tren" class="w-full h-full object-contain transition-opacity duration-300" onerror="handleImageError(this)">
+        
+        <div id="image-fallback" class="hidden absolute inset-0 flex flex-col justify-center items-center bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-950 text-center p-8">
+          <svg class="w-20 h-20 text-emerald-700/60 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="text-amber-400 font-bold font-serif-elegant text-xl block mb-1">Imagen sin cargar</span>
+          <p class="text-xs text-slate-400 max-w-xs leading-relaxed">Guarda la foto correspondiente en tu carpeta local:<br><span class="font-mono bg-slate-950 px-2 py-0.5 rounded text-yellow-400 inline-block mt-2">img/<span id="fallback-num">1</span>.jpg</span></p>
+        </div>
+
+        <div onclick="openFullscreenModal()" class="absolute bottom-4 right-4 bg-emerald-950/80 p-2.5 rounded-full cursor-pointer hover:bg-amber-400 hover:text-slate-950 text-white transition-all duration-300 shadow-lg border border-emerald-500/30">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full flex items-center justify-between max-w-md mt-1">
+      <button onclick="prevSlide()" id="prev-btn" class="flex items-center gap-1.5 px-4 py-2 rounded-full border border-emerald-850 bg-emerald-950/60 hover:bg-emerald-900/80 text-slate-300 text-xs tracking-wider uppercase font-semibold transition-all">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Atrás
+      </button>
+
+      <span class="text-[11px] font-semibold tracking-widest text-amber-400 uppercase font-sans-clean">
+        Parada <span id="current-index-label" class="text-xs font-bold text-white">1</span> / 15
+      </span>
+
+      <button onclick="nextSlide()" id="next-btn" class="flex items-center gap-1.5 px-5 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs tracking-wider uppercase font-bold transition-all shadow-md">
+        <span>Siguiente</span>
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="gift-overlay-screen" class="hidden fixed inset-0 bg-gradient-to-br from-[#011c15] to-[#000a08] z-50 flex flex-col items-center justify-center p-6 text-center">
+    <div class="max-w-md w-full flex flex-col items-center gap-6">
+      <div class="text-center">
+        <span class="px-3 py-1 text-[9px] uppercase tracking-widest font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-full">Próxima Parada Oculta</span>
+        <h2 class="font-serif-elegant text-3xl text-white font-bold mt-3">Un Momento Más...</h2>
+        <p class="font-romantic text-3xl text-amber-400 mt-1">Este viaje no ha terminado</p>
+        <p class="text-slate-400 text-xs mt-3 max-w-xs mx-auto leading-relaxed">
+          Has recorrido todos los vagones del tren, pero antes del destino final, abre este obsequio para desbloquear tu regalo.
+        </p>
+      </div>
+
+      <div id="gift-box" class="gift-container pulse my-8" onclick="unwrapGift()">
+        <div class="gift-box-lid">
+          <div class="gift-bow"></div>
+        </div>
+        <div class="gift-box-body"></div>
+      </div>
+
+      <p class="text-[10px] text-amber-400/90 font-bold uppercase tracking-widest animate-pulse">Toca la caja de regalo para abrirla</p>
+    </div>
+  </div>
+
+  <div id="navigation-rail" class="hidden w-full max-w-5xl px-4 md:px-8 mt-auto z-10">
+    <div class="relative py-6">
+      
+      <div class="train-track w-full"></div>
+
+      <div id="stations-container" class="absolute inset-x-0 top-[18px] flex justify-between">
+        </div>
+
+      <div id="sliding-train" class="absolute -top-[1.5px] left-0 -ml-3 transition-all duration-700 ease-in-out pointer-events-none" style="width: 28px;">
+        <svg class="w-7 h-7 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.8)]" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 15c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-4c0-.55-.45-1-1-1h-1V7h1c.55 0 1-.45 1-1s-.45-1-1-1h-4.5c0-.83-.67-1.5-1.5-1.5S11.5 4.17 11.5 5H6c-.55 0-1 .45-1 1v2H4c-.55 0-1 .45-1 1s.45 1 1 1h1v5H4v1zm14-5h1v4h-1v-4zM6 8h11v6H6V8zm-1.5 9c-.83 0-1.5.67-1.5 1.5S3.67 20 4.5 20s1.5-.67 1.5-1.5S5.33 17 4.5 17zm7 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm7 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="fullscreen-modal" class="hidden fixed inset-0 bg-black/99 z-50 flex flex-col items-center justify-center p-2" onclick="closeFullscreenModal()">
+    <button class="absolute top-4 right-4 text-white hover:text-amber-500 p-2">
+      <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="max-w-5xl max-h-[85vh] w-full flex justify-center items-center">
+      <img id="fullscreen-image" src="" alt="Vista completa" class="object-contain max-h-[85vh] max-w-full rounded shadow-2xl">
+    </div>
+    <div class="mt-3 text-center">
+      <h3 id="fullscreen-title" class="font-serif-elegant text-white text-base font-semibold"></h3>
+    </div>
+  </div>
+
+
+  <script>
+    const STATIONS_MAP = [
+      { id: 1,  badge: "La Introducción",      title: "1. Introducción" },
+      { id: 2,  badge: "El Origen",            title: "2. El Origen" },
+      { id: 3,  badge: "Vagón 1",              title: "3. Primer Vagón" },
+      { id: 4,  badge: "Vagón 2",              title: "4. Segundo Vagón" },
+      { id: 5,  badge: "Vagón 3",              title: "5. Tercer Vagón" },
+      { id: 6,  badge: "Vagón 4",              title: "6. Cuarto Vagón" },
+      { id: 7,  badge: "La Boda",              title: "7. La Boda" },
+      { id: 8,  badge: "Vagón 5",              title: "8. Quinto Vagón" },
+      { id: 9,  badge: "Vagón 6",              title: "9. Sexto Vagón" },
+      { id: 10, badge: "Vagón 7",              title: "10. Séptimo Vagón" },
+      { id: 11, badge: "Vagón 8",              title: "11. Octavo Vagón" },
+      { id: 12, badge: "La Locomotora",        title: "12. La Locomotora", special: true },
+      { id: 13, badge: "Próxima Parada",       title: "13. Próxima Parada" },
+      { id: 14, badge: "Espera...",            title: "14. Espera que hay más..." },
+      { id: 15, badge: "El Regalo",            title: "15. Tu Regalo Especial" }
+    ];
+
+    let currentSlideIndex = 0; 
+    let isUnlocked = false;    
+    let isGiftOpened = false;  
+
+    // Nodos DOM
+    const introScreen = document.getElementById('intro-screen');
+    const journeyScreen = document.getElementById('journey-screen');
+    const navRail = document.getElementById('navigation-rail');
+    const displayImg = document.getElementById('display-image');
+    const imageFrame = document.getElementById('image-frame');
+    const fallbackContainer = document.getElementById('image-fallback');
+    const fallbackNum = document.getElementById('fallback-num');
+    const specialBadge = document.getElementById('special-badge');
+    const slideTitle = document.getElementById('slide-title');
+    const slideBadge = document.getElementById('slide-badge');
+    const startJourneyBtn = document.getElementById('start-journey-btn');
+    const mainEnvelope = document.getElementById('main-envelope');
+    const slidingTrain = document.getElementById('sliding-train');
+    const stationsContainer = document.getElementById('stations-container');
+    const currentLabel = document.getElementById('current-index-label');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    
+    // Música
+    const bgMusic = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    const musicPlayIcon = document.getElementById('music-icon-play');
+    const musicPauseIcon = document.getElementById('music-icon-pause');
+
+    // Regalo
+    const giftOverlay = document.getElementById('gift-overlay-screen');
+    const giftBox = document.getElementById('gift-box');
+
+    function buildStations() {
+      stationsContainer.innerHTML = '';
+      STATIONS_MAP.forEach((station, index) => {
+        const stationNode = document.createElement('div');
+        stationNode.className = `station-node cursor-pointer flex flex-col items-center justify-center transition-all duration-300 relative z-20 group`;
+        stationNode.onclick = () => jumpToSlide(index);
+
+        stationNode.innerHTML = `
+          <div class="station-dot w-3.5 h-3.5 md:w-4.5 md:h-4.5 rounded-full border-2 border-emerald-800 bg-slate-900 group-hover:border-amber-400 transition-all flex items-center justify-center">
+            <span class="text-[7px] font-bold text-slate-400 hidden md:block group-hover:text-amber-400">${index + 1}</span>
+          </div>
+          <span class="absolute top-5 hidden md:group-hover:block whitespace-nowrap bg-emerald-950/95 text-[9px] text-amber-400 px-2 py-0.5 rounded border border-amber-500/30">
+            ${station.badge}
+          </span>
+        `;
+        stationsContainer.appendChild(stationNode);
+      });
+      updateTrainPosition();
+    }
+
+    function updateTrainPosition() {
+      const nodes = stationsContainer.children;
+      STATIONS_MAP.forEach((_, index) => {
+        const node = nodes[index];
+        if (!node) return;
+        const dot = node.querySelector('.station-dot');
+        const numSpan = node.querySelector('span');
+
+        if (index <= currentSlideIndex) {
+          dot.className = "station-dot w-3.5 h-3.5 md:w-4.5 md:h-4.5 rounded-full border border-amber-400 bg-gradient-to-br from-amber-400 to-amber-600 shadow-[0_0_8px_rgba(245,158,11,0.6)] transition-all flex items-center justify-center";
+          if (numSpan) numSpan.className = "text-[7px] font-bold text-slate-950 hidden md:block";
+        } else {
+          dot.className = "station-dot w-3.5 h-3.5 md:w-4.5 md:h-4.5 rounded-full border-2 border-emerald-800 bg-slate-950 transition-all flex items-center justify-center";
+          if (numSpan) numSpan.className = "text-[7px] font-bold text-slate-400 hidden md:block";
+        }
+
+        if (index === currentSlideIndex) {
+          dot.className = "station-dot w-4.5 h-4.5 md:w-5.5 md:h-5.5 rounded-full border-2 border-white bg-amber-400 shadow-[0_0_12px_rgba(255,255,255,0.8)] transition-all flex items-center justify-center scale-110";
+        }
+      });
+
+      const percentage = (currentSlideIndex / (STATIONS_MAP.length - 1)) * 100;
+      slidingTrain.style.left = `calc(${percentage}% - 12px)`;
+    }
+
+    function openEnvelope() {
+      mainEnvelope.classList.add('envelope-open');
+      startJourneyBtn.classList.remove('scale-0');
+      startJourneyBtn.classList.add('scale-100');
+      playMusic(); // La música arranca al hacer click en el lacre
+    }
+
+    startJourneyBtn.onclick = () => {
+      introScreen.classList.add('opacity-0');
+      setTimeout(() => {
+        introScreen.classList.add('hidden');
+        journeyScreen.classList.remove('hidden');
+        navRail.classList.remove('hidden');
+        isUnlocked = true;
+        buildStations();
+        loadSlide();
+      }, 700);
+    };
+
+    function loadSlide() {
+      const data = STATIONS_MAP[currentSlideIndex];
+      
+      slideBadge.textContent = data.badge;
+      slideTitle.textContent = data.title;
+      currentLabel.textContent = data.id;
+
+      if (data.special) {
+        imageFrame.classList.add('locomotive-glow');
+        specialBadge.classList.remove('hidden');
+      } else {
+        imageFrame.classList.remove('locomotive-glow');
+        specialBadge.classList.add('hidden');
+      }
+
+      fallbackContainer.classList.add('hidden');
+      displayImg.classList.remove('hidden');
+      displayImg.style.opacity = '0';
+      displayImg.src = `img/${data.id}.jpg`;
+      
+      displayImg.onload = () => {
+        displayImg.style.opacity = '1';
+      };
+
+      prevBtn.disabled = currentSlideIndex === 0;
+      prevBtn.style.opacity = currentSlideIndex === 0 ? '0.4' : '1';
+
+      if (currentSlideIndex === 13) {
+        nextBtn.innerHTML = `
+          <span class="animate-pulse">Desvelar Regalo</span>
+          <svg class="w-3.5 h-3.5 text-amber-200 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        `;
+        nextBtn.className = "flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-slate-950 text-xs tracking-wider uppercase font-bold transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] scale-105 border border-emerald-300/30";
+      } else {
+        nextBtn.innerHTML = `
+          <span>Siguiente</span>
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        `;
+        nextBtn.className = "flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs tracking-wider uppercase font-bold transition-all shadow-md";
+      }
+
+      if (currentSlideIndex === 14) {
+        nextBtn.style.display = 'none';
+      } else {
+        nextBtn.style.display = 'flex';
+      }
+
+      updateTrainPosition();
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex === 13) {
+        showGiftOverlay();
+      } else if (currentSlideIndex < STATIONS_MAP.length - 1) {
+        currentSlideIndex++;
+        loadSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        loadSlide();
+      }
+    }
+
+    function jumpToSlide(index) {
+      if (!isUnlocked) return;
+      if (index === 14 && !isGiftOpened) {
+        showGiftOverlay();
+        return;
+      }
+      currentSlideIndex = index;
+      loadSlide();
+    }
+
+    function handleImageError(img) {
+      img.classList.add('hidden');
+      fallbackNum.textContent = STATIONS_MAP[currentSlideIndex].id;
+      fallbackContainer.classList.remove('hidden');
+    }
+
+    function showGiftOverlay() {
+      giftOverlay.classList.remove('hidden');
+      giftBox.classList.add('pulse');
+      giftBox.classList.remove('opened');
+    }
+
+    function unwrapGift() {
+      if (isGiftOpened) return;
+
+      giftBox.classList.remove('pulse');
+      giftBox.classList.add('opened');
+      
+      triggerHeartsConfetti();
+
+      setTimeout(() => {
+        isGiftOpened = true;
+        giftOverlay.classList.add('hidden');
+        currentSlideIndex = 14; 
+        loadSlide();
+      }, 1800);
+    }
+
+    const fullscreenModal = document.getElementById('fullscreen-modal');
+    const fullscreenImg = document.getElementById('fullscreen-image');
+    const fullscreenTitle = document.getElementById('fullscreen-title');
+
+    function openFullscreenModal() {
+      const data = STATIONS_MAP[currentSlideIndex];
+      fullscreenImg.src = `img/${data.id}.jpg`;
+      fullscreenTitle.textContent = data.title;
+      fullscreenModal.classList.remove('hidden');
+    }
+
+    function closeFullscreenModal() {
+      fullscreenModal.classList.add('hidden');
+    }
+
+    musicBtn.onclick = () => {
+      if (bgMusic.paused) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
+    };
+
+    function playMusic() {
+      bgMusic.play().then(() => {
+        musicPlayIcon.classList.add('hidden');
+        musicPauseIcon.classList.remove('hidden');
+      }).catch((err) => {
+        console.log("Interacción de seguridad del navegador detectada.", err);
+      });
+    }
+
+    function pauseMusic() {
+      bgMusic.pause();
+      musicPlayIcon.classList.remove('hidden');
+      musicPauseIcon.classList.add('hidden');
+    }
+
+    // PARTÍCULAS ESPECIALES
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function handleResize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    class SolarpunkParticle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 14 + 6;
+        this.speedX = Math.random() * 10 - 5;
+        this.speedY = Math.random() * -14 - 6;
+        this.gravity = 0.22;
+        this.color = this.getRandomColor();
+        this.shape = this.getRandomShape();
+        this.rotation = Math.random() * 360;
+        this.rotationSpeed = Math.random() * 8 - 4;
+        this.opacity = 1;
+      }
+
+      getRandomColor() {
+        const colors = ['#10b981', '#34d399', '#fbbf24', '#fb7185', '#ffffff', '#f59e0b'];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      getRandomShape() {
+        const shapes = ['leaf', 'heart', 'sparkle'];
+        return shapes[Math.floor(Math.random() * shapes.length)];
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += this.gravity;
+        this.rotation += this.rotationSpeed;
+        this.opacity -= 0.006;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate((this.rotation * Math.PI) / 180);
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = this.color;
+
+        if (this.shape === 'leaf') {
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(-this.size, -this.size / 2, 0, -this.size);
+          ctx.quadraticCurveTo(this.size, -this.size / 2, 0, 0);
+          ctx.fill();
+        } else if (this.shape === 'heart') {
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-this.size / 2, -this.size / 2, -this.size, this.size / 3, 0, this.size);
+          ctx.bezierCurveTo(this.size, this.size / 3, this.size / 2, -this.size / 2, 0, 0);
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          for (let i = 0; i < 4; i++) {
+            ctx.lineTo(0, -this.size);
+            ctx.lineTo(this.size / 4, -this.size / 4);
+            ctx.rotate(Math.PI / 2);
+          }
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    function triggerHeartsConfetti() {
+      const x = window.innerWidth / 2;
+      const y = window.innerHeight / 2;
+
+      for (let i = 0; i < 180; i++) {
+        particles.push(new SolarpunkParticle(x, y));
+      }
+
+      function runAnimation() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = particles.length - 1; i >= 0; i--) {
+          particles[i].update();
+          particles[i].draw();
+          if (particles[i].opacity <= 0) {
+            particles.splice(i, 1);
+          }
+        }
+        if (particles.length > 0) {
+          requestAnimationFrame(runAnimation);
+        }
+      }
+      runAnimation();
+    }
+  </script>
+</body>
+</html>
